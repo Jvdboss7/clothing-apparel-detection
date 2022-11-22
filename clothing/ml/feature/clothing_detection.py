@@ -2,7 +2,7 @@ import torch
 from torchvision import datasets
 from pycocotools.coco import COCO
 from clothing.constants import ANNOTATIONS_COCO_JSON_FILE
-from clothing.exception import ClothingException
+from clothing.exception import CustomException
 import cv2
 import os
 import sys
@@ -26,14 +26,14 @@ class ClothingDetection(datasets.VisionDataset):
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             return image
         except Exception as e:
-            raise ClothingException(e, sys) from e
+            raise CustomException(e, sys) from e
 
 
     def _load_target(self, id):
         try:
             return self.coco.loadAnns(self.coco.getAnnIds(id))
         except Exception as e:
-            raise ClothingException(e, sys) from e
+            raise CustomException(e, sys) from e
     
     def __getitem__(self, index):
         try:
@@ -68,7 +68,7 @@ class ClothingDetection(datasets.VisionDataset):
             return image.div(255), targ # scale images
         
         except Exception as e:
-            raise ClothingException(e, sys) from e
+            raise CustomException(e, sys) from e
 
         
     def __len__(self):
@@ -76,4 +76,4 @@ class ClothingDetection(datasets.VisionDataset):
             return len(self.ids)
 
         except Exception as e:
-            raise HelmetException(e, sys) from e
+            raise CustomException(e, sys) from e
