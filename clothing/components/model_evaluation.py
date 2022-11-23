@@ -82,15 +82,16 @@ class ModelEvaluation:
 
                 losses.backward()
 
-            all_losses_dict = pd.DataFrame(all_losses_dict)  # for printing
+            all_losses_dict = pd.DataFrame(all_losses_dict)
+            print(all_losses_dict)# for printing
 
-            print("loss: {:.6f},loss_classifier: {:.6f}, loss_box: {:.6f}, loss_rpn_box: {:.6f}, loss_object: {:.6f}".format(
-                    np.mean(all_losses),
-                    all_losses_dict['loss_classifier'].mean(),
-                    all_losses_dict['loss_box_reg'].mean(),
-                    all_losses_dict['loss_rpn_box_reg'].mean(),
-                    all_losses_dict['loss_objectness'].mean()
-                ))
+            # print("loss: {:.6f},loss_classifier: {:.6f}, loss_box: {:.6f}, loss_rpn_box: {:.6f}, loss_object: {:.6f}".format(
+            #         np.mean(all_losses),
+            #         all_losses_dict['loss_classifier'].mean(),
+            #         all_losses_dict['loss_box_reg'].mean(),
+            #         all_losses_dict['loss_rpn_box_reg'].mean(),
+            #         all_losses_dict['loss_objectness'].mean()
+            #     ))
             return all_losses_dict, np.mean(all_losses)
 
         except Exception as e:
@@ -122,6 +123,7 @@ class ModelEvaluation:
             trained_model = trained_model.to(DEVICE)
 
             all_losses_dict, all_losses = self.evaluate(trained_model, test_loader, device=DEVICE)
+
             os.makedirs(self.model_evaluation_config.EVALUATED_MODEL_DIR, exist_ok=True)
             all_losses_dict.to_csv(self.model_evaluation_config.EVALUATED_LOSS_CSV_PATH, index=False)
 
