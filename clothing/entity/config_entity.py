@@ -55,3 +55,12 @@ class ModelEvaluationConfig:
         self.BATCH: int = 1
         self.SHUFFLE: bool = TRAINED_SHUFFLE
         self.NUM_WORKERS = TRAINED_NUM_WORKERS
+
+# Model Pusher Configurations
+@dataclass
+class ModelPusherConfig:
+    def __init__(self):
+        self.TRAINED_MODEL_DIR: str = os.path.join(from_root(),ARTIFACTS_DIR,TRAINED_MODEL_DIR)
+        self.BEST_MODEL_PATH: str = os.path.join(self.TRAINED_MODEL_DIR,TRAINED_MODEL_NAME)
+        self.BUCKET_NAME: str = BUCKET_NAME
+        self.S3_MODEL_KEY_PATH: str = os.path.join(TRAINED_MODEL_NAME)

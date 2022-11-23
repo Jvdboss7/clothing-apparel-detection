@@ -50,6 +50,8 @@ MODEL_EVALUATION_FILE_NAME = 'loss.csv'
 use_cuda = torch.cuda.is_available()
 DEVICE = torch.device("cuda" if use_cuda else "cpu")
 
+# Prediction Constants
+PREDICTION_CLASSES = [ 'clothing-prediction', 'bag', 'dress', 'hat', 'jacket', 'pants', 'shirt', 'shoe', 'shorts', 'skirt', 'sunglass']
 
 # AWS CONSTANTS
 AWS_ACCESS_KEY_ID_ENV_KEY = "AWS_ACCESS_KEY_ID"
