@@ -19,4 +19,4 @@ python-multipart
 PyYAML
 dill==0.3.5.1
 utils
-#conda install pytorch torchvision torchaudio cpuonly -c pytorch
+#conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
