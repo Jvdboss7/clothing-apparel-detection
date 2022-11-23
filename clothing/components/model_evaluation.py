@@ -83,7 +83,7 @@ class ModelEvaluation:
                 losses.backward()
 
             all_losses_dict = pd.DataFrame(all_losses_dict)
-            print(all_losses_dict)# for printing
+            #print(all_losses_dict)# for printing
 
             # print("loss: {:.6f},loss_classifier: {:.6f}, loss_box: {:.6f}, loss_rpn_box: {:.6f}, loss_object: {:.6f}".format(
             #         np.mean(all_losses),
