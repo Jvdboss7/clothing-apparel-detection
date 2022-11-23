@@ -126,7 +126,7 @@ class ModelTrainer:
             for epoch in range(self.model_trainer_config.EPOCH):
                 # self.train(model, optimiser, train_loader, self.model_trainer_config.DEVICE, epoch)
 
-                train_one_epoch(model, optimiser, train_loader, self.model_trainer_config.DEVICE, epoch, print_freq=10)
+                train_one_epoch(model, optimiser, test_loader, self.model_trainer_config.DEVICE, epoch, print_freq=10)
 
             os.makedirs(self.model_trainer_config.TRAINED_MODEL_DIR, exist_ok=True)
             torch.save(model, self.model_trainer_config.TRAINED_MODEL_PATH)

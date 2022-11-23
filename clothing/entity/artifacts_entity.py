@@ -17,3 +17,9 @@ class DataTransformationArtifacts:
 @dataclass
 class ModelTrainerArtifacts:
     trained_model_path: str
+
+# Model evaluation artifacts
+@dataclass
+class ModelEvaluationArtifacts:
+    is_model_accepted: bool
+    all_losses: str

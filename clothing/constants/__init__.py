@@ -6,8 +6,8 @@ TIMESTAMP: str = datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
 
 # Data Ingestion Constants
 ARTIFACTS_DIR = os.path.join("artifacts", TIMESTAMP)
-BUCKET_NAME = 'helmet-object-detection'
-ZIP_FILE_NAME = 'helmet-dataset.zip'
+BUCKET_NAME = 'clothing-apparel'
+ZIP_FILE_NAME = 'clothing-dataset.zip'
 ANNOTATIONS_COCO_JSON_FILE = '_annotations.coco.json'
 
 INPUT_SIZE = 416
@@ -17,7 +17,7 @@ RANDOM_BRIGHTNESS_CONTRAST = 0.1
 COLOR_JITTER = 0.1
 BBOX_FORMAT = 'coco'
 
-RAW_FILE_NAME = 'helmet'
+RAW_FILE_NAME = 'clothing'
 
 # Data ingestion constants
 DATA_INGESTION_ARTIFACTS_DIR = 'DataIngestionArtifacts'
@@ -41,6 +41,10 @@ TRAINED_BATCH_SIZE = 1
 TRAINED_SHUFFLE = False
 TRAINED_NUM_WORKERS = 4
 EPOCH = 1
+
+# Model evaluation constants
+MODEL_EVALUATION_ARTIFACTS_DIR = 'ModelEvaluationArtifacts'
+MODEL_EVALUATION_FILE_NAME = 'loss.csv'
 
 # Common constants
 use_cuda = torch.cuda.is_available()
