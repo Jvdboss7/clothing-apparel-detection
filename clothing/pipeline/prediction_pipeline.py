@@ -49,7 +49,7 @@ class PredictionPipeline:
 
             s3_sync = S3Sync()
 
-            model_buket_url = f"s3://{self.BUCKET_NAME}/{SAVED_MODEL_DIR}/"
+            model_buket_url = f"s3://{self.bucket_name}/{SAVED_MODEL_DIR}/"
 
             best_model_path = s3_sync.sync_folder_from_s3(folder = SAVED_MODEL_DIR,aws_bucket_url=model_buket_url)
 
