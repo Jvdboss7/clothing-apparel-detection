@@ -7,6 +7,7 @@ TIMESTAMP: str = datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
 # Data Ingestion Constants
 ARTIFACTS_DIR = os.path.join("artifacts", TIMESTAMP)
 BUCKET_NAME = 'clothing-apparel'
+SAVED_MODEL_DIR = "PredictModel"
 ZIP_FILE_NAME = 'clothing-dataset.zip'
 ANNOTATIONS_COCO_JSON_FILE = '_annotations.coco.json'
 
@@ -39,8 +40,8 @@ TRAINED_MODEL_DIR = 'TrainedModel'
 TRAINED_MODEL_NAME = 'model.pt'
 TRAINED_BATCH_SIZE = 1
 TRAINED_SHUFFLE = False
-TRAINED_NUM_WORKERS = 4
-EPOCH = 1
+TRAINED_NUM_WORKERS = 2
+EPOCH = 10
 
 # Model evaluation constants
 MODEL_EVALUATION_ARTIFACTS_DIR = 'ModelEvaluationArtifacts'

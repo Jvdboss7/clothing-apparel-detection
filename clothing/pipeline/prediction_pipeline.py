@@ -10,6 +10,7 @@ from clothing.exception import CustomException
 from clothing.logger import logging
 from clothing.configuration.s3_operations import S3Operation
 from clothing.constants import *
+from clothing.configuration.s3_syncer import S3Sync
 
 
 class PredictionPipeline:
@@ -45,7 +46,13 @@ class PredictionPipeline:
             # Loading the best model from s3 bucket
             os.makedirs("artifacts/PredictModel", exist_ok=True)
             predict_model_path = os.path.join(os.getcwd(), "artifacts", "PredictModel", TRAINED_MODEL_NAME)
-            best_model_path = self.s3.read_data_from_s3(TRAINED_MODEL_NAME, self.bucket_name, predict_model_path)
+            self.s3.read_data_from_s3(TRAINED_MODEL_NAME, BUCKET_NAME, predict_model_path)
+
+            s3_sync = S3Sync()
+
+            model_buket_url = f"s3://{self.bucket_name}/{SAVED_MODEL_DIR}/"
+            s3_sync.sync_folder_from_s3(folder=SAVED_MODEL_DIR, aws_bucket_url=model_buket_url)
+            best_model_path = os.path.join(SAVED_MODEL_DIR, "model.pt")
             logging.info("Exited the get_model_from_s3 method of PredictionPipeline class")
             return best_model_path
 
