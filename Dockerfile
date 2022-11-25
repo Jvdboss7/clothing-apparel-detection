@@ -1,5 +1,6 @@
 
 FROM continuumio/miniconda3
+RUN apt update -y && apt install awscli -y
 WORKDIR /clothing
 COPY . /clothing
 RUN apt-get update && pip install --upgrade pip
