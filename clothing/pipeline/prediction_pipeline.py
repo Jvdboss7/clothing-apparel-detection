@@ -43,7 +43,7 @@ class PredictionPipeline:
         logging.info("Entered the get_model_from_s3 method of PredictionPipeline class")
         try:
             # Loading the best model from s3 bucket
-            os.makedirs(os.path.join(os.getcwd(),"artifacts/PredictModel", exist_ok=True))
+            os.makedirs(os.path.join(os.getcwd(),"artifacts/PredictModel"), exist_ok=True)
             predict_model_path = os.path.join(os.getcwd(), "artifacts", "PredictModel", TRAINED_MODEL_NAME)
             best_model_path = self.s3.read_data_from_s3(TRAINED_MODEL_NAME, self.bucket_name, predict_model_path)
             logging.info("Exited the get_model_from_s3 method of PredictionPipeline class")
