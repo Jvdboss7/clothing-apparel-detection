@@ -9,6 +9,7 @@ from torchvision.utils import draw_bounding_boxes
 from clothing.exception import CustomException
 from clothing.logger import logging
 from clothing.configuration.s3_operations import S3Operation
+from clothing.configuration.s3_syncer import S3Sync
 from clothing.constants import *
 
 
@@ -43,9 +44,16 @@ class PredictionPipeline:
         logging.info("Entered the get_model_from_s3 method of PredictionPipeline class")
         try:
             # Loading the best model from s3 bucket
-            os.makedirs(os.path.join(os.getcwd(),"artifacts/PredictModel"), exist_ok=True)
-            predict_model_path = os.path.join(os.getcwd(), "artifacts", "PredictModel", TRAINED_MODEL_NAME)
-            best_model_path = self.s3.read_data_from_s3(TRAINED_MODEL_NAME, self.bucket_name, predict_model_path)
+            os.makedirs(os.path.join(os.getcwd(),"PredictModel"), exist_ok=True)
+            # predict_model_path = os.path.join(os.getcwd(), "artifacts", "PredictModel", TRAINED_MODEL_NAME)
+
+            s3_sync = S3Sync()
+
+            model_buket_url = f"s3://{self.BUCKET_NAME}/{SAVED_MODEL_DIR}/"
+
+            best_model_path = s3_sync.sync_folder_from_s3(folder = SAVED_MODEL_DIR,aws_bucket_url=model_buket_url)
+
+            # best_model_path = self.s3.read_data_from_s3(TRAINED_MODEL_NAME, self.bucket_name, predict_model_path)
             logging.info("Exited the get_model_from_s3 method of PredictionPipeline class")
             return best_model_path
 
