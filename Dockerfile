@@ -1,5 +1,4 @@
 FROM continuumio/miniconda3
-
 RUN apt update -y && apt install awscli -y
 
 WORKDIR /clothing
@@ -15,3 +14,5 @@ RUN pip install torch torchvision --extra-index-url https://download.pytorch.org
 RUN pip install -e .
 
 CMD ["python","app.py"]
+
+
