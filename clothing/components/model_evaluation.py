@@ -58,10 +58,9 @@ class ModelEvaluation:
             best_model = self.s3.s3_key_path_available(bucket_name=self.model_evaluation_config.S3_BUCKET_NAME,s3_key="ModelTrainerArtifacts/trained_model/")
 
             if best_model:
-                self.s3.sync_folder_from_s3(folder=self.model_evaluation_config.S3_FOLDER_NAME,bucket_name=self.model_evaluation_config.S3_BUCKET_NAME,bucket_folder_name=self.model_evaluation_config.BUCKET_FOLDER_NAME)
-
+                self.s3.sync_folder_from_s3(folder=self.model_evaluation_config.EVALUATED_MODEL_DIR,bucket_name=self.model_evaluation_config.S3_BUCKET_NAME,bucket_folder_name=self.model_evaluation_config.BUCKET_FOLDER_NAME)
             logging.info("Exited the get_model_from_s3 method of PredictionPipeline class")
-            best_model_path = os.path.join(self.model_evaluation_config.BEST_MODEL_PATH,"model.pt")
+            best_model_path = os.path.join(self.model_evaluation_config.EVALUATED_MODEL_DIR,"model.pt")
             return best_model_path
 
         except Exception as e:
@@ -144,50 +143,27 @@ class ModelEvaluation:
 
             is_model_accepted = False
             s3_all_losses = None 
-            
-            if s3_model is False:
+            print(f"{os.path.isfile(s3_model)}")
+            if os.path.isfile(s3_model) is False: 
                 is_model_accepted = True
+                print("s3 model is false and model accepted is true")
                 s3_all_losses = None
 
-            elif s3_model is True:
-
+            else:
+                print("Entered inside the else condition")
                 s3_model = torch.load(s3_model, map_location=torch.device(DEVICE))
-
+                print("Model loaded from s3")
                 _, s3_all_losses = self.evaluate(s3_model,test_loader, device=DEVICE)
 
                 if s3_all_losses > all_losses:
+                    print(f"printing the loss inside the if condition{s3_all_losses} and {all_losses}")
                     # 0.03 > 0.02
                     is_model_accepted = True
-
-                    model_evaluation_artifact = ModelEvaluationArtifacts(
-                        is_model_accepted=is_model_accepted,
-                        all_losses=all_losses)
-
-                else:
-                    is_model_accepted = False
-
-            # if s3_model is not None:
-            #     s3_model = torch.load(s3_model, map_location=torch.device(DEVICE))
-
-            #     _, s3_all_losses = self.evaluate(s3_model,test_loader, device=DEVICE)
-
-            #     if s3_all_losses > all_losses:
-            #         # 0.03 > 0.02
-            #         is_model_accepted = True
-
-            #         model_evaluation_artifact = ModelEvaluationArtifacts(
-            #             is_model_accepted=is_model_accepted,
-            #             all_losses=all_losses)
-
-            #     else:
-            #         is_model_accepted = False
-            # else:
-            #     is_model_accepted = True
-            #     s3_all_losses = None
-
+                    print("f{is_model_accepted}")
             model_evaluation_artifact = ModelEvaluationArtifacts(
                         is_model_accepted=is_model_accepted,
-                        all_losses=s3_all_losses)
+                        all_losses=all_losses)
+            print(f"{model_evaluation_artifact}")
 
             logging.info("Exited the initiate_model_evaluation method of Model Evaluation class")
             return model_evaluation_artifact

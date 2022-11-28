@@ -10,11 +10,12 @@ from clothing.exception import CustomException
 from clothing.logger import logging
 from clothing.constants import *
 from clothing.configuration.s3_syncer import S3Sync
-
+from clothing.entity.config_entity import ModelEvaluationConfig
 
 class PredictionPipeline:
     def __init__(self):
         self.bucket_name = BUCKET_NAME
+        self.model_evaluation_config =ModelEvaluationConfig()
 
     def image_loader(self, image_bytes):
         """load image, returns cuda tensor"""
@@ -41,14 +42,16 @@ class PredictionPipeline:
         """
         logging.info("Entered the get_model_from_s3 method of PredictionPipeline class")
         try:
-            # Loading the best model from s3 bucket
+            # Loading the best model from s3 bucket 
+            prediction_model_path=os.path.join(os.getcwd(),"PredictModel")
             os.makedirs(os.path.join(os.getcwd(),"PredictModel"), exist_ok=True)
             s3_sync = S3Sync()
-            model_buket_url = f"s3://{self.bucket_name}/{SAVED_MODEL_DIR}/"
-            s3_sync.sync_folder_from_s3(folder=SAVED_MODEL_DIR, aws_bucket_url=model_buket_url)
+            # model_buket_url = f"s3://{self.bucket_name}/{SAVED_MODEL_DIR}/"
+            #s3_sync.sync_folder_from_s3(folder=SAVED_MODEL_DIR, aws_bucket_url=model_buket_url)
+            s3_sync.sync_folder_from_s3(folder=prediction_model_path,bucket_name=self.model_evaluation_config.S3_BUCKET_NAME,bucket_folder_name=self.model_evaluation_config.BUCKET_FOLDER_NAME)
 
-            s3_sync.sync_folder_from_s3(folder=SAVED_MODEL_DIR,bucket_name=BUCKET_NAME,bucket_folder_name=TRAINED_MODEL_DIR)
-            best_model_path = os.path.join(SAVED_MODEL_DIR, "model.pt")
+            #s3_sync.sync_folder_from_s3(folder=SAVED_MODEL_DIR,bucket_name=BUCKET_NAME,bucket_folder_name=TRAINED_MODEL_DIR)
+            best_model_path = os.path.join(prediction_model_path, "model.pt")
             # if not os.path.exists(best_model_path):
             #     raise "Model Not Found"
             # else:
@@ -61,6 +64,9 @@ class PredictionPipeline:
     def prediction(self, best_model_path: str, image_tensor, image_int_tensor) -> float:
         logging.info("Entered the prediction method of PredictionPipeline class")
         try:
+            # s3_model = self.get_model_from_s3()
+            # model = torch.load(s3_model, map_location=torch.device(DEVICE))
+
             model = torch.load(best_model_path, map_location=torch.device(DEVICE))
             model.eval()
             with torch.no_grad():

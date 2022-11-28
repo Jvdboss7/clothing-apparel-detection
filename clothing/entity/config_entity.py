@@ -58,8 +58,8 @@ class ModelEvaluationConfig:
         self.TRAINED_MODEL_DIR: str = os.path.join(from_root(), ARTIFACTS_DIR, MODEL_TRAINER_ARTIFACTS_DIR,TRAINED_MODEL_DIR)
         self.TRAINED_MODEL_PATH = os.path.join(self.TRAINED_MODEL_DIR, TRAINED_MODEL_NAME)       
         self.S3_MODEL_FOLDER = TRAINED_MODEL_DIR
-        self.S3_FOLDER_NAME = S3_FOLDER_NAME
         self.BUCKET_FOLDER_NAME = BUCKET_FOLDER_NAME
+        
         # self.S3_MODEL_KEY_PATH: str = os.path.join(TRAINED_MODEL_DIR,TRAINED_MODEL_NAME)
 
         self.S3_BUCKET_NAME = BUCKET_NAME

@@ -12,7 +12,7 @@ class S3Sync:
         self.s3_resource = self.s3_client.s3_resource
 
         self.s3_client = self.s3_client.s3_client
-
+        
 
     def sync_folder_to_s3(self,folder,bucket_name,bucket_folder_name):
         command = f"aws s3 sync {folder} s3://{bucket_name}/{bucket_folder_name}"
