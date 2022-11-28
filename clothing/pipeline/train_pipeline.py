@@ -107,6 +107,8 @@ class TrainPipeline:
             model_trainer_artifact = self.start_model_trainer(
                 data_transformation_artifact=data_transformation_artifact
             )
+            # data_transformation_artifact = 
+            # model_trainer_artifact = ModelTrainerArtifacts(trained_model_path='/home/jvdboss/workspace/ML_DL/Clothing_Apparel_Detection/DL_projects/clothing-apparel-detection/artifacts/11_28_2022_18_25_13/ModelTrainerArtifacts/trained_model/model.pt')
             model_evaluation_artifact = self.start_model_evaluation(model_trainer_artifact=model_trainer_artifact,
                                                                     data_transformation_artifact=data_transformation_artifact
             )

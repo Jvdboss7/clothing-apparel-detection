@@ -1,11 +1,9 @@
 import os
 import sys
 import math
-import numpy as np
 import pandas as pd
 from tqdm import tqdm
 import torch
-from torchvision import models
 from torch.utils.data import DataLoader
 from clothing.logger import logging
 from clothing.exception import CustomException
@@ -13,8 +11,8 @@ from clothing.utils.main_utils import load_object
 from clothing.ml.models.model_optimiser import model_optimiser
 from clothing.entity.config_entity import ModelTrainerConfig
 from clothing.entity.artifacts_entity import DataTransformationArtifacts, ModelTrainerArtifacts
-from clothing.ml.detection.engine import train_one_epoch, evaluate
-from torchvision.models.detection import retinanet_resnet50_fpn_v2, RetinaNet_ResNet50_FPN_V2_Weights
+from clothing.ml.detection.engine import train_one_epoch
+from torchvision.models.detection import retinanet_resnet50_fpn_v2
 
 class ModelTrainer:
     def __init__(self, data_transformation_artifacts: DataTransformationArtifacts,

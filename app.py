@@ -1,7 +1,7 @@
 from fastapi import FastAPI, File
 from uvicorn import run as app_run
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response, JSONResponse
+from fastapi.responses import Response, JSONResponse,RedirectResponse
 from clothing.constants import APP_HOST, APP_PORT
 from clothing.pipeline.train_pipeline import TrainPipeline
 from clothing.pipeline.prediction_pipeline import PredictionPipeline
@@ -17,6 +17,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/", tags=["authentication"])
+async def index():
+    return RedirectResponse(url="/docs")
 
 @app.get("/train")
 async def training():

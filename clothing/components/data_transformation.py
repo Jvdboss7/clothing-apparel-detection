@@ -79,6 +79,8 @@ class DataTransformation:
                 transformed_test_object=self.data_transformation_config.TEST_TRANSFORM_OBJECT_FILE_PATH,
                 number_of_classes=n_classes)
 
+            logging.info(f'{data_transformation_artifact}')
+
             logging.info("Exited the initiate_data_transformation method of Data transformation class")
 
             return data_transformation_artifact

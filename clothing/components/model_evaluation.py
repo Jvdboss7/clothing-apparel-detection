@@ -48,16 +48,20 @@ class ModelEvaluation:
         """
         logging.info("Entered the get_model_from_s3 method of PredictionPipeline class")
         try:
-            # Loading the best model from s3 bucket
-            # predict_model_path = self.model_evaluation_config.BEST_MODEL_PATH
-            
-            # best_model_path = self.s3.read_data_from_s3(TRAINED_MODEL_NAME, self.bucket_name, predict_model_path)
 
-            best_model_path = self.s3.sync_folder_from_s3(folder=self.model_evaluation_config.BEST_MODEL_PATH,bucket_name=self.model_evaluation_config.S3_BUCKET_NAME,bucket_folder_name=self.model_evaluation_config.S3_MODEL_FOLDER)
+
+            # best_model_path = self.s3.sync_folder_from_s3(folder=self.model_evaluation_config.EVALUATED_MODEL_DIR,bucket_name=self.model_evaluation_config.S3_BUCKET_NAME,bucket_folder_name=self.model_evaluation_config.S3_MODEL_FOLDER)
+
+            # best_model = os.path.join(best_model_path,self.model_evaluation_config.S3_MODEL_NAME)
+            logging.info(f"Checking the s3_key path{self.model_evaluation_config.TRAINED_MODEL_PATH}")
+            print(f"s3_key_path:{self.model_evaluation_config.TRAINED_MODEL_PATH}")
+            best_model = self.s3.s3_key_path_available(bucket_name=self.model_evaluation_config.S3_BUCKET_NAME,s3_key=self.model_evaluation_config.TRAINED_MODEL_PATH)
+
+            
 
             logging.info("Exited the get_model_from_s3 method of PredictionPipeline class")
 
-            return best_model_path
+            return best_model
 
         except Exception as e:
             raise CustomException(e, sys) from e
@@ -130,27 +134,56 @@ class ModelEvaluation:
             all_losses_dict, all_losses = self.evaluate(trained_model, test_loader, device=DEVICE)
 
             os.makedirs(self.model_evaluation_config.EVALUATED_MODEL_DIR, exist_ok=True)
+            
             all_losses_dict.to_csv(self.model_evaluation_config.EVALUATED_LOSS_CSV_PATH, index=False)
 
             s3_model = self.get_model_from_s3()
-            s3_model = torch.load(s3_model, map_location=torch.device(DEVICE))
 
-            s3_all_losses_dict, s3_all_losses = self.evaluate(s3_model,test_loader, device=DEVICE)
+            logging.info(f"{s3_model}")
 
-            if s3_all_losses > all_losses:
-                # 0.03 > 0.02
+            if s3_model is False:
                 is_model_accepted = True
+                s3_all_losses = None
 
-                model_evaluation_artifact = ModelEvaluationArtifacts(
-                    is_model_accepted=is_model_accepted,
-                    all_losses=all_losses)
+            elif s3_model is True:
 
-            else:
-                is_model_accepted = False
+                s3_model = torch.load(s3_model, map_location=torch.device(DEVICE))
 
-                model_evaluation_artifact = ModelEvaluationArtifacts(
-                    is_model_accepted=is_model_accepted,
-                    all_losses=s3_all_losses)
+                _, s3_all_losses = self.evaluate(s3_model,test_loader, device=DEVICE)
+
+                if s3_all_losses > all_losses:
+                    # 0.03 > 0.02
+                    is_model_accepted = True
+
+                    model_evaluation_artifact = ModelEvaluationArtifacts(
+                        is_model_accepted=is_model_accepted,
+                        all_losses=all_losses)
+
+                else:
+                    is_model_accepted = False
+
+            # if s3_model is not None:
+            #     s3_model = torch.load(s3_model, map_location=torch.device(DEVICE))
+
+            #     _, s3_all_losses = self.evaluate(s3_model,test_loader, device=DEVICE)
+
+            #     if s3_all_losses > all_losses:
+            #         # 0.03 > 0.02
+            #         is_model_accepted = True
+
+            #         model_evaluation_artifact = ModelEvaluationArtifacts(
+            #             is_model_accepted=is_model_accepted,
+            #             all_losses=all_losses)
+
+            #     else:
+            #         is_model_accepted = False
+            # else:
+            #     is_model_accepted = True
+            #     s3_all_losses = None
+
+            model_evaluation_artifact = ModelEvaluationArtifacts(
+                        is_model_accepted=is_model_accepted,
+                        all_losses=s3_all_losses)
 
             logging.info("Exited the initiate_model_evaluation method of Model Evaluation class")
             return model_evaluation_artifact

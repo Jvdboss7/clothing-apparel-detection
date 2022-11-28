@@ -1,7 +1,7 @@
 import torch
 from torchvision import datasets
 from pycocotools.coco import COCO
-from clothing.constants import ANNOTATIONS_COCO_JSON_FILE
+from clothing.constants import ANNOTATIONS_COCO_JSON_FILE,DATA_DIR
 from clothing.exception import CustomException
 import cv2
 import os
@@ -15,14 +15,14 @@ class ClothingDetection(datasets.VisionDataset):
         # the 3 transform parameters are required for datasets.VisionDataset
         super().__init__(root, transforms, transform, target_transform)
         self.split = split #train, valid, test
-        self.coco = COCO(os.path.join(root, split, ANNOTATIONS_COCO_JSON_FILE)) # annotation stored here
+        self.coco = COCO(os.path.join(root,DATA_DIR,split,ANNOTATIONS_COCO_JSON_FILE)) # annotation stored here
         self.ids = list(sorted(self.coco.imgs.keys()))
         self.ids = [id for id in self.ids if (len(self._load_target(id)) > 0)]
     
     def _load_image(self, id: int):
         try:
             path = self.coco.loadImgs(id)[0]['file_name']
-            image = cv2.imread(os.path.join(self.root, self.split, path))
+            image = cv2.imread(os.path.join(self.root,DATA_DIR,self.split, path))
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             return image
         except Exception as e:

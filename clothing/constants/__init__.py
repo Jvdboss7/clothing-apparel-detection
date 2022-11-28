@@ -36,7 +36,8 @@ DATA_TRANSFORMATION_TEST_FILE_NAME = "test.pkl"
 DATA_TRANSFORMATION_TRAIN_SPLIT = 'train'
 DATA_TRANSFORMATION_TEST_SPLIT = 'test'
 
-# Model Training Constants 
+# Model Training Constants
+MODEL_TRAINER_ARTIFACTS_DIR = 'ModelTrainerArtifacts'
 TRAINED_MODEL_DIR = 'trained_model'
 TRAINED_MODEL_NAME = 'model.pt'
 TRAINED_BATCH_SIZE = 1

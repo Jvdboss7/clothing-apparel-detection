@@ -24,7 +24,7 @@ class ModelPusher:
         """
         logging.info("Entered initiate_model_pusher method of ModelTrainer class")
         try:
-            self.s3.sync_folder_to_s3(folder=self.model_pusher_config.BEST_MODEL_PATH,bucket_name=self.model_pusher_config.BUCKET_NAME,bucket_folder_name=self.model_pusher_config.S3_MODEL_KEY_PATH)
+            self.s3.sync_folder_to_s3(folder=self.model_pusher_config.TRAINED_MODEL_DIR,bucket_name=self.model_pusher_config.BUCKET_NAME,bucket_folder_name=self.model_pusher_config.S3_MODEL_KEY_PATH)
 
             logging.info("Uploaded best model to s3 bucket")
 

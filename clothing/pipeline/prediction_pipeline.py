@@ -46,6 +46,8 @@ class PredictionPipeline:
             s3_sync = S3Sync()
             model_buket_url = f"s3://{self.bucket_name}/{SAVED_MODEL_DIR}/"
             s3_sync.sync_folder_from_s3(folder=SAVED_MODEL_DIR, aws_bucket_url=model_buket_url)
+
+            s3_sync.sync_folder_from_s3(folder=SAVED_MODEL_DIR,bucket_name=BUCKET_NAME,bucket_folder_name=TRAINED_MODEL_DIR)
             best_model_path = os.path.join(SAVED_MODEL_DIR, "model.pt")
             # if not os.path.exists(best_model_path):
             #     raise "Model Not Found"
