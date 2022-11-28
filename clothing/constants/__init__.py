@@ -48,6 +48,9 @@ EPOCH = 1
 # Model evaluation constants
 MODEL_EVALUATION_ARTIFACTS_DIR = 'ModelEvaluationArtifacts'
 MODEL_EVALUATION_FILE_NAME = 'loss.csv'
+BEST_MODEL_DIR = "best_model"
+S3_FOLDER_NAME="ModelTrainerArtifacts"
+BUCKET_FOLDER_NAME="trained_model"
 
 # Common constants
 use_cuda = torch.cuda.is_available()

@@ -49,7 +49,7 @@ class ModelEvaluationConfig:
     def __init__(self):
         self.EVALUATED_MODEL_DIR: str = os.path.join(from_root(), ARTIFACTS_DIR, MODEL_EVALUATION_ARTIFACTS_DIR)
         self.EVALUATED_LOSS_CSV_PATH = os.path.join(self.EVALUATED_MODEL_DIR, MODEL_EVALUATION_FILE_NAME)
-        self.BEST_MODEL_PATH = os.path.join(self.EVALUATED_MODEL_DIR, TRAINED_MODEL_NAME )
+        self.BEST_MODEL_PATH = os.path.join(self.EVALUATED_MODEL_DIR, TRAINED_MODEL_DIR,BEST_MODEL_DIR )
         self.S3_MODEL_NAME = TRAINED_MODEL_NAME
         self.DEVICE = DEVICE
         self.BATCH: int = 1
@@ -58,6 +58,8 @@ class ModelEvaluationConfig:
         self.TRAINED_MODEL_DIR: str = os.path.join(from_root(), ARTIFACTS_DIR, MODEL_TRAINER_ARTIFACTS_DIR,TRAINED_MODEL_DIR)
         self.TRAINED_MODEL_PATH = os.path.join(self.TRAINED_MODEL_DIR, TRAINED_MODEL_NAME)       
         self.S3_MODEL_FOLDER = TRAINED_MODEL_DIR
+        self.S3_FOLDER_NAME = S3_FOLDER_NAME
+        self.BUCKET_FOLDER_NAME = BUCKET_FOLDER_NAME
         # self.S3_MODEL_KEY_PATH: str = os.path.join(TRAINED_MODEL_DIR,TRAINED_MODEL_NAME)
 
         self.S3_BUCKET_NAME = BUCKET_NAME

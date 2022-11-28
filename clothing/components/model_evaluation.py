@@ -55,13 +55,14 @@ class ModelEvaluation:
             # best_model = os.path.join(best_model_path,self.model_evaluation_config.S3_MODEL_NAME)
             logging.info(f"Checking the s3_key path{self.model_evaluation_config.TRAINED_MODEL_PATH}")
             print(f"s3_key_path:{self.model_evaluation_config.TRAINED_MODEL_PATH}")
-            best_model = self.s3.s3_key_path_available(bucket_name=self.model_evaluation_config.S3_BUCKET_NAME,s3_key=self.model_evaluation_config.TRAINED_MODEL_PATH)
+            best_model = self.s3.s3_key_path_available(bucket_name=self.model_evaluation_config.S3_BUCKET_NAME,s3_key="ModelTrainerArtifacts/trained_model/")
 
-            
+            if best_model:
+                self.s3.sync_folder_from_s3(folder=self.model_evaluation_config.S3_FOLDER_NAME,bucket_name=self.model_evaluation_config.S3_BUCKET_NAME,bucket_folder_name=self.model_evaluation_config.BUCKET_FOLDER_NAME)
 
             logging.info("Exited the get_model_from_s3 method of PredictionPipeline class")
-
-            return best_model
+            best_model_path = os.path.join(self.model_evaluation_config.BEST_MODEL_PATH,"model.pt")
+            return best_model_path
 
         except Exception as e:
             raise CustomException(e, sys) from e
@@ -141,6 +142,9 @@ class ModelEvaluation:
 
             logging.info(f"{s3_model}")
 
+            is_model_accepted = False
+            s3_all_losses = None 
+            
             if s3_model is False:
                 is_model_accepted = True
                 s3_all_losses = None
