@@ -1,27 +1,32 @@
 import os
 import sys
-from zipfile import ZipFile
+from shutil import unpack_archive
 from clothing.entity.config_entity import DataIngestionConfig
 from clothing.entity.artifacts_entity import DataIngestionArtifacts
-from clothing.configuration.s3_operations import S3Operation
+from clothing.configuration.s3_syncer import S3Sync
 from clothing.exception import CustomException
 from clothing.logger import logging
 from clothing.constants import *
 
 
 class DataIngestion:
-    def __init__(self, data_ingestion_config: DataIngestionConfig, s3_operations: S3Operation):
+    def __init__(self, data_ingestion_config: DataIngestionConfig):
         self.data_ingestion_config = data_ingestion_config
-        self.s3_operations = s3_operations
+        
+        self.s3 = S3Sync()
 
     def get_data_from_s3(self) -> None:
         try:
             logging.info("Entered the get_data_from_s3 method of Data ingestion class")
             os.makedirs(self.data_ingestion_config.DATA_INGESTION_ARTIFACTS_DIR, exist_ok=True)
 
-            self.s3_operations.read_data_from_s3(self.data_ingestion_config.ZIP_FILE_NAME,
-                                                 self.data_ingestion_config.BUCKET_NAME,
-                                                 self.data_ingestion_config.ZIP_FILE_PATH)
+            # self.s3_operations.read_data_from_s3(self.data_ingestion_config.ZIP_FILE_NAME,
+            #                                      self.data_ingestion_config.BUCKET_NAME,
+            #                                      self.data_ingestion_config.ZIP_FILE_PATH)
+
+            self.s3.sync_folder_from_s3(folder=self.data_ingestion_config.DATA_INGESTION_ARTIFACTS_DIR,bucket_name=self.data_ingestion_config.BUCKET_NAME,bucket_folder_name=self.data_ingestion_config.S3_DATA_DIR)
+
+
             logging.info("Exited the get_data_from_s3 method of Data ingestion class")
         except Exception as e:
             raise CustomException(e, sys) from e
@@ -29,8 +34,8 @@ class DataIngestion:
     def unzip_and_clean(self):
         logging.info("Entered the unzip_and_clean method of Data ingestion class")
         try:
-            with ZipFile(self.data_ingestion_config.ZIP_FILE_PATH, 'r') as zip_ref:
-                zip_ref.extractall(self.data_ingestion_config.ZIP_FILE_DIR)
+            unpack_archive(filename=self.data_ingestion_config.ZIP_FILE_PATH,extract_dir=self.data_ingestion_config.ZIP_FILE_DIR,format="zip")
+
             logging.info("Exited the unzip_and_clean method of Data ingestion class")
 
             return self.data_ingestion_config.TRAIN_DATA_ARTIFACT_DIR, self.data_ingestion_config.TEST_DATA_ARTIFACT_DIR, self.data_ingestion_config.VALID_DATA_ARTIFACT_DIR

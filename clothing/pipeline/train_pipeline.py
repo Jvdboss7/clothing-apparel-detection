@@ -4,7 +4,6 @@ from clothing.components.data_transformation import DataTransformation
 from clothing.components.model_trainer import ModelTrainer
 from clothing.components.model_evaluation import ModelEvaluation
 from clothing.components.model_pusher import ModelPusher
-from clothing.configuration.s3_operations import S3Operation
 from clothing.exception import CustomException
 from clothing.entity.config_entity import DataIngestionConfig, DataTransformationConfig, ModelTrainerConfig,ModelEvaluationConfig,ModelPusherConfig
 from clothing.entity.artifacts_entity import DataIngestionArtifacts, DataTransformationArtifacts, ModelTrainerArtifacts,ModelEvaluationArtifacts,ModelPusherArtifacts
@@ -17,14 +16,12 @@ class TrainPipeline:
         self.model_trainer_config = ModelTrainerConfig()
         self.model_evaluation_config = ModelEvaluationConfig()
         self.model_pusher_config = ModelPusherConfig()
-        self.s3_operations=S3Operation()
-
     def start_data_ingestion(self) -> DataIngestionArtifacts:
         logging.info("Entered the start_data_ingestion method of TrainPipeline class")
         try:
             logging.info("Getting the data from S3 bucket")
             data_ingestion = DataIngestion(
-                data_ingestion_config=self.data_ingestion_config, s3_operations= S3Operation()
+                data_ingestion_config=self.data_ingestion_config
             )
             data_ingestion_artifact = data_ingestion.initiate_data_ingestion()
             logging.info("Got the train, test and valid from s3")
@@ -84,12 +81,11 @@ class TrainPipeline:
         except Exception as e:
             raise CustomException(e, sys) from e
 
-    def start_model_pusher(self,s3: S3Operation,) -> ModelPusherArtifacts:
+    def start_model_pusher(self) -> ModelPusherArtifacts:
         logging.info("Entered the start_model_pusher method of TrainPipeline class")
         try:
             model_pusher = ModelPusher(
                 model_pusher_config=self.model_pusher_config,
-                s3=s3,
             )
             model_pusher_artifact = model_pusher.initiate_model_pusher()
             logging.info("Initiated the model pusher")
@@ -107,6 +103,7 @@ class TrainPipeline:
             data_transformation_artifact = self.start_data_transformation(
                 data_ingestion_artifact=data_ingestion_artifact
             )
+
             model_trainer_artifact = self.start_model_trainer(
                 data_transformation_artifact=data_transformation_artifact
             )
@@ -115,7 +112,7 @@ class TrainPipeline:
             )
             if not model_evaluation_artifact.is_model_accepted:
                 raise Exception("Trained model is not better than the best model")
-            model_pusher_artifact = self.start_model_pusher(s3=self.s3_operations)
+            model_pusher_artifact = self.start_model_pusher()
             logging.info("Exited the run_pipeline method of TrainPipeline class")
 
         except Exception as e:

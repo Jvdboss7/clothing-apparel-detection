@@ -1,17 +1,16 @@
 from dataclasses import dataclass
 from from_root import from_root
 from clothing.constants import *
-from clothing.configuration.s3_operations import S3Operation
 import os
 
 
 @dataclass
 class DataIngestionConfig:
     def __init__(self):
-        self.S3_OPERATION = S3Operation(),
         self.BUCKET_NAME: str = BUCKET_NAME
         self.ZIP_FILE_NAME:str = ZIP_FILE_NAME
-        self.DATA_INGESTION_ARTIFACTS_DIR: str = os.path.join(from_root(), ARTIFACTS_DIR, DATA_INGESTION_ARTIFACTS_DIR)
+        self.S3_DATA_DIR = DATA_DIR
+        self.DATA_INGESTION_ARTIFACTS_DIR: str = os.path.join(from_root(), ARTIFACTS_DIR, DATA_INGESTION_ARTIFACTS_DIR,DATA_DIR)
         self.TRAIN_DATA_ARTIFACT_DIR = os.path.join(self.DATA_INGESTION_ARTIFACTS_DIR, DATA_INGESTION_TRAIN_DIR)
         self.TEST_DATA_ARTIFACT_DIR = os.path.join(self.DATA_INGESTION_ARTIFACTS_DIR, DATA_INGESTION_TEST_DIR)
         self.VALID_DATA_ARTIFACT_DIR = os.path.join(self.DATA_INGESTION_ARTIFACTS_DIR, DATA_INGESTION_VALID_DIR)
@@ -56,6 +55,11 @@ class ModelEvaluationConfig:
         self.SHUFFLE: bool = TRAINED_SHUFFLE
         self.NUM_WORKERS = TRAINED_NUM_WORKERS
 
+        self.S3_MODEL_FOLDER = TRAINED_MODEL_DIR
+        # self.S3_MODEL_KEY_PATH: str = os.path.join(TRAINED_MODEL_DIR,TRAINED_MODEL_NAME)
+
+        self.S3_BUCKET_NAME = BUCKET_NAME
+
 # Model Pusher Configurations
 @dataclass
 class ModelPusherConfig:
@@ -63,4 +67,4 @@ class ModelPusherConfig:
         self.TRAINED_MODEL_DIR: str = os.path.join(from_root(),ARTIFACTS_DIR,TRAINED_MODEL_DIR)
         self.BEST_MODEL_PATH: str = os.path.join(self.TRAINED_MODEL_DIR,TRAINED_MODEL_NAME)
         self.BUCKET_NAME: str = BUCKET_NAME
-        self.S3_MODEL_KEY_PATH: str = os.path.join(TRAINED_MODEL_NAME)
+        self.S3_MODEL_KEY_PATH: str = os.path.join(TRAINED_MODEL_DIR,TRAINED_MODEL_NAME)

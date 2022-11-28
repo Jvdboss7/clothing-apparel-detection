@@ -12,8 +12,8 @@ from clothing.logger import logging
 from clothing.exception import CustomException
 from clothing.utils.main_utils import load_object
 from clothing.entity.config_entity import ModelEvaluationConfig
-from clothing.configuration.s3_operations import S3Operation
 from clothing.entity.artifacts_entity import ModelTrainerArtifacts, DataTransformationArtifacts, ModelEvaluationArtifacts
+from clothing.configuration.s3_syncer import S3Sync
 
 
 class ModelEvaluation:
@@ -25,7 +25,7 @@ class ModelEvaluation:
         self.model_evaluation_config = model_evaluation_config
         self.data_transformation_artifacts = data_transformation_artifacts
         self.model_trainer_artifacts = model_trainer_artifacts
-        self.s3 = S3Operation()
+        self.s3 = S3Sync()
         self.bucket_name = BUCKET_NAME
 
     @staticmethod
@@ -49,9 +49,14 @@ class ModelEvaluation:
         logging.info("Entered the get_model_from_s3 method of PredictionPipeline class")
         try:
             # Loading the best model from s3 bucket
-            predict_model_path = self.model_evaluation_config.BEST_MODEL_PATH
-            best_model_path = self.s3.read_data_from_s3(TRAINED_MODEL_NAME, self.bucket_name, predict_model_path)
+            # predict_model_path = self.model_evaluation_config.BEST_MODEL_PATH
+            
+            # best_model_path = self.s3.read_data_from_s3(TRAINED_MODEL_NAME, self.bucket_name, predict_model_path)
+
+            best_model_path = self.s3.sync_folder_from_s3(folder=self.model_evaluation_config.BEST_MODEL_PATH,bucket_name=self.model_evaluation_config.S3_BUCKET_NAME,bucket_folder_name=self.model_evaluation_config.S3_MODEL_FOLDER)
+
             logging.info("Exited the get_model_from_s3 method of PredictionPipeline class")
+
             return best_model_path
 
         except Exception as e:

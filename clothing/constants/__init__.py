@@ -9,6 +9,7 @@ ARTIFACTS_DIR = os.path.join("artifacts", TIMESTAMP)
 BUCKET_NAME = 'clothing-apparel'
 SAVED_MODEL_DIR = "PredictModel"
 ZIP_FILE_NAME = 'clothing-dataset.zip'
+DATA_DIR = "data"
 ANNOTATIONS_COCO_JSON_FILE = '_annotations.coco.json'
 
 INPUT_SIZE = 416
@@ -36,12 +37,12 @@ DATA_TRANSFORMATION_TRAIN_SPLIT = 'train'
 DATA_TRANSFORMATION_TEST_SPLIT = 'test'
 
 # Model Training Constants 
-TRAINED_MODEL_DIR = 'TrainedModel'
+TRAINED_MODEL_DIR = 'trained_model'
 TRAINED_MODEL_NAME = 'model.pt'
 TRAINED_BATCH_SIZE = 1
 TRAINED_SHUFFLE = False
 TRAINED_NUM_WORKERS = 2
-EPOCH = 10
+EPOCH = 1
 
 # Model evaluation constants
 MODEL_EVALUATION_ARTIFACTS_DIR = 'ModelEvaluationArtifacts'

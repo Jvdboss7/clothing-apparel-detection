@@ -8,14 +8,12 @@ from torchvision import transforms
 from torchvision.utils import draw_bounding_boxes
 from clothing.exception import CustomException
 from clothing.logger import logging
-from clothing.configuration.s3_operations import S3Operation
 from clothing.constants import *
 from clothing.configuration.s3_syncer import S3Sync
 
 
 class PredictionPipeline:
     def __init__(self):
-        self.s3 = S3Operation()
         self.bucket_name = BUCKET_NAME
 
     def image_loader(self, image_bytes):
