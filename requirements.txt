@@ -5,7 +5,7 @@ opencv-python
 albumentations
 ipykernel
 tqdm
-# pycocotools   #Comment when creating Docker Image
+#pycocotools   #Comment when creating Docker Image
 cython
 from-root
 boto3
