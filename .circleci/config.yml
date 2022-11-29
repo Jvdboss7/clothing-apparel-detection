@@ -69,6 +69,7 @@ jobs:
           aws-region: REGION_NAME
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY 
           configure-default-region: true 
+          override-installed: true
 
       - run:
           name: google cloud authentication
