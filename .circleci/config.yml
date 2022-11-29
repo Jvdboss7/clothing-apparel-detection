@@ -11,12 +11,6 @@ jobs:
     steps:
       - checkout
 
-      - aws-cli/setup:
-          aws-access-key-id: AWS_ACCESS_KEY_ID 
-          aws-region: REGION_NAME
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY 
-          configure-default-region: true 
-
       - run: 
           name: lint code
           command: echo "Linting repository"
@@ -69,6 +63,12 @@ jobs:
       # AWS_DEFAULT_REGION: "ap-south-1"
     steps:
       - checkout
+
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY_ID 
+          aws-region: REGION_NAME
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY 
+          configure-default-region: true 
 
       - run:
           name: google cloud authentication
