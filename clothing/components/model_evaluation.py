@@ -48,11 +48,6 @@ class ModelEvaluation:
         """
         logging.info("Entered the get_model_from_s3 method of PredictionPipeline class")
         try:
-
-
-            # best_model_path = self.s3.sync_folder_from_s3(folder=self.model_evaluation_config.EVALUATED_MODEL_DIR,bucket_name=self.model_evaluation_config.S3_BUCKET_NAME,bucket_folder_name=self.model_evaluation_config.S3_MODEL_FOLDER)
-
-            # best_model = os.path.join(best_model_path,self.model_evaluation_config.S3_MODEL_NAME)
             logging.info(f"Checking the s3_key path{self.model_evaluation_config.TRAINED_MODEL_PATH}")
             print(f"s3_key_path:{self.model_evaluation_config.TRAINED_MODEL_PATH}")
             best_model = self.s3.s3_key_path_available(bucket_name=self.model_evaluation_config.S3_BUCKET_NAME,s3_key="ModelTrainerArtifacts/trained_model/")
@@ -92,15 +87,7 @@ class ModelEvaluation:
                 losses.backward()
 
             all_losses_dict = pd.DataFrame(all_losses_dict)
-            #print(all_losses_dict)# for printing
 
-            # print("loss: {:.6f},loss_classifier: {:.6f}, loss_box: {:.6f}, loss_rpn_box: {:.6f}, loss_object: {:.6f}".format(
-            #         np.mean(all_losses),
-            #         all_losses_dict['loss_classifier'].mean(),
-            #         all_losses_dict['loss_box_reg'].mean(),
-            #         all_losses_dict['loss_rpn_box_reg'].mean(),
-            #         all_losses_dict['loss_objectness'].mean()
-            #     ))
             return all_losses_dict, np.mean(all_losses)
 
         except Exception as e:

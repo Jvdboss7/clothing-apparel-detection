@@ -54,14 +54,6 @@ class ModelTrainer:
                 optimizer.step()
             all_losses_dict = pd.DataFrame(all_losses_dict)  # for printing
 
-            # print("Epoch {}, lr: {:.6f}, loss: {:.6f}, loss_classifier: {:.6f}, loss_box: {:.6f}, loss_rpn_box: {:.6f}, loss_object: {:.6f}".format(
-            #     epoch, optimizer.param_groups[0]['lr'], np.mean(all_losses),
-            #     all_losses_dict['loss_classifier'].mean(),
-            #     all_losses_dict['loss_box_reg'].mean(),
-            #     all_losses_dict['loss_rpn_box_reg'].mean(),
-            #     all_losses_dict['loss_objectness'].mean()
-            # ))
-
         except Exception as e:
             raise CustomException(e, sys) from e
 
@@ -109,20 +101,11 @@ class ModelTrainer:
             logging.info("Loaded training data loader object")
             model = retinanet_resnet50_fpn_v2(score_thresh=0.5,num_classes=11)
 
-            # model = models.detection.fasterrcnn_mobilenet_v3_large_fpn(pretrained=True)
-
-            # logging.info("Loaded faster Rcnn  model")
-
-            # in_features = model.roi_heads.box_predictor.cls_score.in_features  # we need to change the head
-
-            # model.roi_heads.box_predictor = models.detection.faster_rcnn.FastRCNNPredictor(in_features, self.data_transformation_artifacts.number_of_classes)
-
             optimiser = model_optimiser(model)
 
             logging.info("loaded optimiser")
 
             for epoch in range(self.model_trainer_config.EPOCH):
-                # self.train(model, optimiser, train_loader, self.model_trainer_config.DEVICE, epoch)
 
                 train_one_epoch(model, optimiser, test_loader, self.model_trainer_config.DEVICE, epoch, print_freq=10)
 

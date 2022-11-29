@@ -20,10 +20,6 @@ class DataIngestion:
             logging.info("Entered the get_data_from_s3 method of Data ingestion class")
             os.makedirs(self.data_ingestion_config.DATA_INGESTION_ARTIFACTS_DIR, exist_ok=True)
 
-            # self.s3_operations.read_data_from_s3(self.data_ingestion_config.ZIP_FILE_NAME,
-            #                                      self.data_ingestion_config.BUCKET_NAME,
-            #                                      self.data_ingestion_config.ZIP_FILE_PATH)
-
             self.s3.sync_folder_from_s3(folder=self.data_ingestion_config.DATA_INGESTION_ARTIFACTS_DIR,bucket_name=self.data_ingestion_config.BUCKET_NAME,bucket_folder_name=self.data_ingestion_config.S3_DATA_DIR)
 
 

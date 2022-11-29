@@ -29,7 +29,7 @@ from torchvision.utils import draw_bounding_boxes
 from pycocotools.coco import COCO
 # Now, we will define our transforms
 from albumentations.pytorch import ToTensorV2
-from engine import train_one_epoch
+from clothing.ml.detection.engine import train_one_epoch
 from torchvision.models.detection import retinanet_resnet50_fpn_v2, RetinaNet_ResNet50_FPN_V2_Weights
 
 
@@ -89,19 +89,6 @@ def train_one_epoch(model, optimizer, loader, device, epoch):
         losses.backward()
         optimizer.step()
         
-#         if lr_scheduler is not None:
-#             lr_scheduler.step() # 
-        
-    # all_losses_dict = pd.DataFrame(all_losses_dict) # for printing
-    # print("Epoch {}, lr: {:.6f}, loss: {:.6f}, loss_classifier: {:.6f}, loss_box: {:.6f}, loss_rpn_box: {:.6f}, loss_object: {:.6f}".format(
-    #     epoch, optimizer.param_groups[0]['lr'], np.mean(all_losses),
-    #     all_losses_dict['loss_classifier'].mean(),
-    #     all_losses_dict['loss_box_reg'].mean(),
-    #     all_losses_dict['loss_rpn_box_reg'].mean(),
-    #     all_losses_dict['loss_objectness'].mean()
-    # ))
-
-
 class ClothingDetection(datasets.VisionDataset):
     def __init__(self, root, split='valid', transform=None, target_transform=None, transforms=None):
         # the 3 transform parameters are reuqired for datasets.VisionDataset
@@ -165,21 +152,6 @@ if __name__ == "__main__":
 
     train_dataset = ClothingDetection(root=dataset_path, transforms=get_transforms(True))
 
-
-    # Lets view a sample
-    # sample = train_dataset[2]
-    # img_int = torch.tensor(sample[0] * 255, dtype=torch.uint8)
-    # plt.imshow(draw_bounding_boxes(
-    #     img_int, sample[1]['boxes'], [classes[i] for i in sample[1]['labels']], width=4
-    # ).permute(1, 2, 0))
-
-
-
-    # lets load the faster rcnn model
-    # model = models.detection.fasterrcnn_mobilenet_v3_large_fpn(pretrained=True)
-    # in_features = model.roi_heads.box_predictor.cls_score.in_features # we need to change the head
-    # model.roi_heads.box_predictor = models.detection.faster_rcnn.FastRCNNPredictor(in_features, n_classes)
-    # model = torchvision.models.detection.retinanet_resnet50_fpn(num_classes=11)
     model = retinanet_resnet50_fpn_v2(score_thresh=0.5,num_classes=11)
 
 
