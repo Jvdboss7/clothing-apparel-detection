@@ -106,7 +106,7 @@ docker run -d -p 8080:8080 <IMAGEID>
 4. CircleCI
 
 
-## `clothin` is the main package folder which contains 
+## `clothing` is the main package folder which contains 
 
 **Artifact** : Stores all artifacts created from running the application
 
