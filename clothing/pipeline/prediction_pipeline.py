@@ -43,8 +43,8 @@ class PredictionPipeline:
         logging.info("Entered the get_model_from_s3 method of PredictionPipeline class")
         try:
             # Loading the best model from s3 bucket 
-            prediction_model_path=os.path.join(os.getcwd(),"PredictModel")
-            os.makedirs(os.path.join(os.getcwd(),"PredictModel"), exist_ok=True)
+            prediction_model_path=os.path.join("PredictModel")
+            os.makedirs(prediction_model_path, exist_ok=True)
             s3_sync = S3Sync()
             # model_buket_url = f"s3://{self.bucket_name}/{SAVED_MODEL_DIR}/"
             #s3_sync.sync_folder_from_s3(folder=SAVED_MODEL_DIR, aws_bucket_url=model_buket_url)
