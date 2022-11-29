@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  aws-cli: circleci/aws-cli@2.0.3
+
 jobs:
   continuous-integration:
     docker:
@@ -7,6 +10,12 @@ jobs:
     resource_class: medium
     steps:
       - checkout
+
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY_ID 
+          aws-region: REGION_NAME
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY 
+          configure-default-region: true 
 
       - run: 
           name: lint code
@@ -55,9 +64,9 @@ jobs:
       REPOSITORY: clothing-apparel-detection
       GAR_IMAGE_NAME: clothing
       IMAGE_TAG: latest
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      AWS_DEFAULT_REGION: "ap-south-1"
+      # AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      # AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      # AWS_DEFAULT_REGION: "ap-south-1"
     steps:
       - checkout
 
@@ -85,7 +94,7 @@ jobs:
 
       - run:
           name: start container
-          command: docker run -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} -e REGION_NAME=${REGION_NAME} --name=${IMAGE_NAME} -d -p 80:8080 ${GOOGLE_COMPUTE_ZONE}-docker.pkg.dev/${GOOGLE_PROJECT_ID}/$REPOSITORY/$GAR_IMAGE_NAME:$IMAGE_TAG 
+          command: docker run --name=${IMAGE_NAME} -d -p 80:8080 ${GOOGLE_COMPUTE_ZONE}-docker.pkg.dev/${GOOGLE_PROJECT_ID}/$REPOSITORY/$GAR_IMAGE_NAME:$IMAGE_TAG 
 
 workflows:
   CICD:
