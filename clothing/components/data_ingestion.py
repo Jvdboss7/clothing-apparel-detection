@@ -1,12 +1,12 @@
 import os
 import sys
-from shutil import unpack_archive
 from clothing.entity.config_entity import DataIngestionConfig
 from clothing.entity.artifacts_entity import DataIngestionArtifacts
 from clothing.configuration.s3_syncer import S3Sync
 from clothing.exception import CustomException
 from clothing.logger import logging
 from clothing.constants import *
+from zipfile import ZipFile
 
 
 class DataIngestion:
@@ -30,7 +30,11 @@ class DataIngestion:
     def unzip_and_clean(self):
         logging.info("Entered the unzip_and_clean method of Data ingestion class")
         try:
-            unpack_archive(filename=self.data_ingestion_config.ZIP_FILE_PATH,extract_dir=self.data_ingestion_config.ZIP_FILE_DIR,format="zip")
+            zip_file_name = os.path.join(self.data_ingestion_config.DATA_INGESTION_ARTIFACTS_DIR,self.data_ingestion_config.ZIP_FILE_NAME)
+
+            zip_obj = ZipFile(zip_file_name)
+
+            zip_obj.extractall(path=self.data_ingestion_config.ZIP_FILE_DIR)
 
             logging.info("Exited the unzip_and_clean method of Data ingestion class")
 
